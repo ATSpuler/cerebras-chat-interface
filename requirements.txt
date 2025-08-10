@@ -1,0 +1,4 @@
+python-dotenv
+cerebras_cloud_sdk
+gradio
+apsw
