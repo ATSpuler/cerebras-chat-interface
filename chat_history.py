@@ -5,7 +5,7 @@ from typing import List, Dict, Optional, Tuple
 import uuid
 
 class ChatHistory:
-    def __init__(self, db_path: str = "chat_history.sqlite"):
+    def __init__(self, db_path: str = "chat_history.db"):
         """Initialize chat history with APSW SQLite database"""
         self.db_path = db_path
         self.connection = apsw.Connection(db_path)
