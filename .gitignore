@@ -1,5 +1,7 @@
 # Environment variables
 .env
+CLAUDE.md
+current_working_demo/
 
 # Python
 __pycache__/
@@ -41,7 +43,7 @@ Thumbs.db
 
 # SQLite databases
 *.db
-chat_history.sqlite
+chat_history.db
 
 # Jupyter
 .ipynb_checkpoints/
