@@ -71,26 +71,49 @@ def create_chat_interface():
     # Create the chat interface
     chat_interface = gr.ChatInterface(
         fn=chat_function,
-        title="Cerebras AI Chat",
-        description="Chat with Cerebras Qwen-3-Coder-480B model • Chat history is automatically saved",
+        title="Albin's Console based on Qwen-3-Coder-480B",
         theme=gr.themes.Soft(),
-        examples=[
-            "Hello! How are you?",
-            "Can you explain what quantum computing is?",
-            "Write a simple Python function to calculate fibonacci numbers",
-        ],
-        cache_examples=False,
+        retry_btn=None,
+        undo_btn=None,
+        css="""
+            footer { display: none !important; }
+            .gradio-container h1 { 
+                font-size: 1.2rem !important; 
+                margin: 0.5rem 0 !important; 
+                padding: 0 !important; 
+            }
+            .chatbot { 
+                height: 82vh !important; 
+                margin-bottom: 0.5rem !important;
+            }
+            .chat-interface { padding-bottom: 0.5rem !important; }
+            .input-container { 
+                margin-bottom: 0.5rem !important; 
+                padding-bottom: 0 !important;
+            }
+            .form > .wrap {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 0.5rem !important;
+                align-items: flex-end !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+            }
+            .form > .wrap > button {
+                height: 40px !important;
+                min-height: 40px !important;
+                padding: 8px 16px !important;
+                margin: 0 !important;
+                flex-shrink: 0 !important;
+            }
+            .gradio-container {
+                padding-bottom: 0 !important;
+                margin-bottom: 0 !important;
+            }
+        """,
         additional_inputs=[],
     )
     
-    # Add custom footer with signature
-    with chat_interface:
-        gr.HTML("""
-            <div style='text-align: center; margin-top: 20px; padding: 10px; 
-                        border-top: 1px solid #ddd; color: #666; font-size: 14px;'>
-                💬 Chat history automatically saved • Built by <strong>Albin</strong>
-            </div>
-        """)
     
     return chat_interface
 
