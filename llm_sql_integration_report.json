@@ -1,0 +1,130 @@
+{
+  "summary": {
+    "total_tests": 10,
+    "passed_tests": 4,
+    "failed_tests": 6,
+    "success_rate": 40.0,
+    "test_duration": 0.422,
+    "timestamp": "2025-09-02T12:05:24.876829",
+    "llm_sql_integration": "needs_attention"
+  },
+  "detailed_results": [
+    {
+      "test_name": "SQL Safety Validation",
+      "passed": false,
+      "timestamp": "2025-09-02T12:05:24.455949",
+      "details": {
+        "dangerous_blocked": "4/5",
+        "safe_allowed": "4/4"
+      }
+    },
+    {
+      "test_name": "Schema Information Retrieval",
+      "passed": true,
+      "timestamp": "2025-09-02T12:05:24.457093",
+      "details": {
+        "total_tables": 7,
+        "expected_tables": [
+          "messages",
+          "agent_memory",
+          "agent_state",
+          "sessions",
+          "conversations",
+          "tasks"
+        ],
+        "missing_tables": []
+      }
+    },
+    {
+      "test_name": "Natural Language to SQL Conversion",
+      "passed": true,
+      "timestamp": "2025-09-02T12:05:24.457780",
+      "details": {
+        "successful_conversions": "4/5",
+        "success_rate": "80.0%"
+      }
+    },
+    {
+      "test_name": "SQL Query Execution",
+      "passed": false,
+      "timestamp": "2025-09-02T12:05:24.458224",
+      "details": {
+        "successful_executions": "0/4",
+        "queries_tested": [
+          "count",
+          "conversations",
+          "active_tasks",
+          "important_memories"
+        ]
+      }
+    },
+    {
+      "test_name": "Natural Language Database Queries",
+      "passed": false,
+      "timestamp": "2025-09-02T12:05:24.458789",
+      "details": {
+        "successful_requests": "0/5",
+        "success_rate": "0.0%"
+      }
+    },
+    {
+      "test_name": "Database Interface Responses",
+      "passed": false,
+      "timestamp": "2025-09-02T12:05:24.460850",
+      "details": {
+        "successful_responses": "2/4",
+        "response_quality": "needs_improvement"
+      }
+    },
+    {
+      "test_name": "Conversation Insights Generation",
+      "passed": true,
+      "timestamp": "2025-09-02T12:05:24.461778",
+      "details": {
+        "insights_generated": [
+          "message_stats",
+          "conversation_activity",
+          "task_completion_rate",
+          "memory_distribution"
+        ],
+        "expected_insights": [
+          "message_stats",
+          "task_completion_rate",
+          "memory_distribution"
+        ],
+        "insights_working": 0
+      }
+    },
+    {
+      "test_name": "Search Functionality",
+      "passed": false,
+      "timestamp": "2025-09-02T12:05:24.462360",
+      "details": {
+        "search_queries_tested": 3,
+        "successful_searches": 0,
+        "search_capability": "needs_improvement"
+      }
+    },
+    {
+      "test_name": "LLM Context Enhancement",
+      "passed": true,
+      "timestamp": "2025-09-02T12:05:24.462425",
+      "details": {
+        "messages_tested": 3,
+        "context_enhanced": 3,
+        "enhancement_rate": "100.0%"
+      }
+    },
+    {
+      "test_name": "Performance with Data Volume",
+      "passed": false,
+      "timestamp": "2025-09-02T12:05:24.876718",
+      "details": {
+        "data_creation_time_s": 0.413,
+        "simple_query_time_s": 0.0,
+        "complex_query_time_s": 0.001,
+        "total_conversations": 0
+      }
+    }
+  ]
+}

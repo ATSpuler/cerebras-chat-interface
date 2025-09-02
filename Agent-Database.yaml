@@ -1,0 +1,109 @@
+Agent-Database.yaml
+Binding Walkthrough
+
+  What the System Should Do
+
+  1. Enhanced Memory & Context
+
+  When you start a conversation, the agent now:
+  - Remembers your preferences from previous sessions
+  - Maintains conversation context across chat sessions
+  - Learns your communication patterns (do you prefer code examples? ask
+  lots of questions?)
+  - Stores important facts about your projects and preferences
+
+  2. Intelligent Context Enhancement
+
+  Before sending your message to Cerebras API, the system:
+  - Retrieves relevant context from previous conversations
+  - Adds user preferences to the system message
+  - Includes active tasks you might be working on
+  - Provides important facts learned from past interactions
+
+  Example: If you previously mentioned you're working on a React project,
+  it will include that context in future responses.
+
+  3. Learning & Adaptation
+
+  The agent continuously learns by:
+  - Analyzing message patterns: Detects if you prefer explanations, code,
+  questions
+  - Tracking successful interactions: Remembers what responses worked well
+  - Storing user preferences: Saves your coding style preferences,
+  framework choices
+  - Building conversation summaries: Maintains context without
+  overwhelming the model
+
+  What You Should Experience
+
+  First Time Using It:
+
+  1. Start a conversation - the system creates a new conversation ID
+  2. Ask about coding (e.g., "How do I create a React component?")
+  3. The agent responds normally but learns that you're interested in
+  React
+  4. Behind the scenes: It stores your message patterns, response metrics,
+   and infers preferences
+
+  Subsequent Sessions:
+
+  1. Start a new conversation
+  2. Ask another coding question
+  3. Notice: The agent now has context about your React interest
+  4. The response should be more tailored to your previous interactions
+
+  Key Features to Test:
+
+  Memory Persistence:
+  - Ask about a specific technology (e.g., Python)
+  - Close and restart the app
+  - Ask about coding again - it should remember your Python interest
+
+  Pattern Learning:
+  - Ask several questions in a row
+  - The system learns you "ask lots of questions"
+  - Future responses adapt to this pattern
+
+  Context Enhancement:
+  - Have a conversation about a project
+  - The agent stores project details as "important facts"
+  - Later conversations reference this context automatically
+
+  Database Tables Created
+
+  The system creates these new tables:
+
+  1. agent_state - Current agent state and context
+  2. tasks - Task tracking and management
+  3. agent_memory - Long-term learning and facts
+  4. sessions - Session data and continuity
+
+  Visual Indicators
+
+  In the interface:
+  - Title shows "(with Agent-DB Binding)"
+  - Each message triggers database storage
+  - Context enhancement happens transparently
+
+  In the database:
+  - chat_history.db gets populated with new tables
+  - Memory entries accumulate over time
+  - User preferences build up automatically
+
+  Testing the Binding
+
+  Simple Test:
+  1. Say: "I'm working on a Python Flask application"
+  2. Chat about something else
+  3. Later ask: "How do I handle errors in web apps?"
+  4. The response should reference Flask context automatically
+
+  Advanced Test:
+  1. Have multiple conversations about different topics
+  2. Check that each conversation maintains separate context
+  3. Verify that cross-conversation learning happens (preferences carry
+  over)
+
+  The system transforms from a stateless chat interface into an
+  intelligent agent that learns, remembers, and adapts to your specific
+  needs and communication style.

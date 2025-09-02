@@ -1,14 +1,15 @@
 import gradio as gr
 from cerebras_client import CerebrasClient
-from chat_history import ChatHistory
+from agent_db import AgentDB, AgentMemoryManager
 
 def create_chat_interface():
     """Create and configure the Gradio chat interface"""
     
-    # Initialize Cerebras client and chat history
+    # Initialize AgentDB and Cerebras client with database integration
     try:
-        cerebras = CerebrasClient()
-        chat_history = ChatHistory()
+        agent_db = AgentDB()
+        cerebras = CerebrasClient(agent_db=agent_db)
+        memory_manager = AgentMemoryManager(agent_db)
     except ValueError as e:
         print(f"Error initializing Cerebras client: {e}")
         print("Please make sure you have a .env file with CEREBRAS_API_KEY")
@@ -35,10 +36,24 @@ def create_chat_interface():
             if current_conversation_id is None:
                 # Generate title from first message (truncated)
                 title = message[:50] + "..." if len(message) > 50 else message
-                current_conversation_id = chat_history.create_conversation(title)
+                current_conversation_id = agent_db.create_conversation(title)
+                
+                # Set conversation context in Cerebras client
+                cerebras.set_conversation_context(current_conversation_id)
+                
+                # Initialize session
+                session_data = {
+                    'started_at': history,
+                    'user_agent': 'gradio_chat',
+                    'initial_message': message[:100]
+                }
+                agent_db.create_session(current_conversation_id, session_data)
+            
+            # Analyze user message patterns
+            cerebras.analyze_user_pattern(message)
             
             # Save user message to database
-            chat_history.add_message(current_conversation_id, "user", message)
+            agent_db.add_message(current_conversation_id, "user", message)
             
             # Convert Gradio history format to Cerebras messages format
             messages = []
@@ -62,16 +77,28 @@ def create_chat_interface():
                 yield partial_response
             
             # Save complete bot response to database
-            chat_history.add_message(current_conversation_id, "assistant", partial_response)
+            agent_db.add_message(current_conversation_id, "assistant", partial_response)
+            
+            # Store interaction summary for learning
+            if len(partial_response) > 100:  # Substantial response
+                agent_db.store_memory(
+                    current_conversation_id,
+                    'successful_interactions',
+                    f"User: {message[:50]}... | Response: {len(partial_response)} chars",
+                    importance=2
+                )
+            
+            # Summarize conversation if getting long
+            agent_db.summarize_conversation(current_conversation_id)
             
         except Exception as e:
             error_msg = f"Error: {str(e)}"
             yield error_msg
     
-    # Create the chat interface
+    # Create simple chat interface (avoiding complex Blocks for now)
     chat_interface = gr.ChatInterface(
         fn=chat_function,
-        title="Albin's Console based on Qwen-3-Coder-480B",
+        title="Albin's Console based on Qwen-3-Coder-480B (with Agent-DB Binding)",
         theme=gr.themes.Soft(),
         retry_btn=None,
         undo_btn=None,
@@ -114,7 +141,6 @@ def create_chat_interface():
         additional_inputs=[],
     )
     
-    
     return chat_interface
 
 if __name__ == "__main__":
@@ -125,10 +151,10 @@ if __name__ == "__main__":
         print("Starting Cerebras Chat Interface...")
         print("Open your browser to the URL shown below")
         interface.launch(
-            server_name="0.0.0.0",  # Allow external access
-            server_port=7860,       # Default Gradio port
-            share=False,            # Set to True to create public link
-            debug=True              # Enable debug mode
+            server_name="127.0.0.1", # Use localhost instead of 0.0.0.0
+            server_port=7860,        # Default Gradio port
+            share=False,             # Set to True to create public link
+            debug=True               # Enable debug mode
         )
     else:
         print("Failed to create chat interface. Please check your configuration.")

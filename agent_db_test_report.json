@@ -1,0 +1,176 @@
+{
+  "summary": {
+    "total_tests": 11,
+    "passed_tests": 9,
+    "failed_tests": 2
+  },
+  "detailed_results": [
+    {
+      "test_name": "Database Initialization",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.291387",
+      "details": {
+        "expected_tables": [
+          "conversations",
+          "messages",
+          "agent_state",
+          "tasks",
+          "agent_memory",
+          "sessions"
+        ],
+        "missing_tables": []
+      }
+    },
+    {
+      "test_name": "Conversation Creation & Message Storage",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.305395",
+      "details": {
+        "conversation_id": "310cb32e-4ae9-4e49-9180-0c5aaeae1aa8",
+        "message_count": 1
+      }
+    },
+    {
+      "test_name": "Agent State Persistence",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.307381",
+      "details": {
+        "stored": {
+          "language": "Python",
+          "framework": "Flask",
+          "style": "detailed_explanations"
+        },
+        "retrieved": {
+          "language": "Python",
+          "framework": "Flask",
+          "style": "detailed_explanations"
+        }
+      }
+    },
+    {
+      "test_name": "User Preference Learning",
+      "passed": false,
+      "timestamp": "2025-09-02T11:51:28.319988",
+      "details": {
+        "code_preference": null,
+        "language_preference": null,
+        "experience_level": null
+      }
+    },
+    {
+      "test_name": "Task Management",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.332801",
+      "details": {
+        "total_tasks_created": 2,
+        "active_tasks": 1,
+        "task_details": {
+          "id": "35d5ccdd-91d4-4b3c-b9c5-861c6bae3c1c",
+          "task_name": "Build REST API",
+          "description": "Create Flask REST API with authentication",
+          "status": "in_progress",
+          "priority": 3,
+          "created_at": "2025-09-02 15:51:28",
+          "updated_at": "2025-09-02 15:51:28"
+        }
+      }
+    },
+    {
+      "test_name": "Memory Storage & Retrieval",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.342784",
+      "details": {
+        "important_facts_count": 2,
+        "patterns_count": 1,
+        "sample_memory": {
+          "content": "User is building an e-commerce platform",
+          "importance": 3,
+          "created_at": "2025-09-02 15:51:28",
+          "conversation_id": "310cb32e-4ae9-4e49-9180-0c5aaeae1aa8"
+        }
+      }
+    },
+    {
+      "test_name": "Session Management",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.353011",
+      "details": {
+        "session_id": "25ce6a7d-a68c-429a-aa45-cbdbe596849f",
+        "conversation_match": true,
+        "data_updated": true
+      }
+    },
+    {
+      "test_name": "Context Enhancement",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.358378",
+      "details": {
+        "original_message_count": 1,
+        "enhanced_message_count": 2,
+        "has_system_context": true,
+        "sample_context": "Context from previous interactions:\nUser preferences: {\"language\": \"Python\", \"framework\": \"Flask\", \""
+      }
+    },
+    {
+      "test_name": "Pattern Analysis",
+      "passed": false,
+      "timestamp": "2025-09-02T11:51:28.388333",
+      "details": {
+        "questions_detected": 0,
+        "code_preferences": 0,
+        "explanation_requests": 0
+      }
+    },
+    {
+      "test_name": "Comprehensive Context Retrieval",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.389730",
+      "details": {
+        "context_components": [
+          "messages",
+          "tasks",
+          "agent_state",
+          "memories"
+        ],
+        "has_data": true,
+        "sample_sizes": {
+          "messages": 1,
+          "tasks": 2,
+          "agent_state": 1,
+          "memories": 2
+        }
+      }
+    },
+    {
+      "test_name": "Statistics Generation",
+      "passed": true,
+      "timestamp": "2025-09-02T11:51:28.390606",
+      "details": {
+        "stats_fields": [
+          "total_conversations",
+          "total_messages",
+          "most_recent",
+          "total_tasks",
+          "completed_tasks",
+          "task_completion_rate",
+          "total_memories",
+          "active_sessions"
+        ],
+        "sample_stats": {
+          "total_conversations": 1,
+          "total_messages": 2,
+          "total_tasks": 3,
+          "completed_tasks": 1,
+          "task_completion_rate": 0.3333333333333333,
+          "total_memories": 4,
+          "active_sessions": 1
+        }
+      }
+    }
+  ],
+  "test_environment": {
+    "database_path": "test_agent_db.db",
+    "python_version": "3.9.20 (main, Oct 16 2024, 09:40:42) \n[Clang 18.1.8 ]",
+    "test_timestamp": "2025-09-02T11:51:28.390880"
+  }
+}
