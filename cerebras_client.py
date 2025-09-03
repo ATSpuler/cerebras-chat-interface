@@ -20,7 +20,7 @@ class CerebrasClient:
         self.current_conversation_id = conversation_id
     
     def get_enhanced_context(self, messages: List[Dict]) -> List[Dict]:
-        """Enhance messages with database context if available"""
+        """Enhance messages with comprehensive memory-aware system prompts"""
         if not self.agent_db or not self.current_conversation_id:
             return messages
         
@@ -30,39 +30,112 @@ class CerebrasClient:
         # Build enhanced context
         enhanced_messages = []
         
-        # Add system message with context if we have relevant information
-        if context.get('agent_state') or context.get('tasks'):
-            system_context = []
-            
-            # Add user preferences
-            user_prefs = context.get('agent_state', {}).get('user_preferences')
-            if user_prefs:
-                system_context.append(f"User preferences: {json.dumps(user_prefs)}")
-            
-            # Add active tasks
-            active_tasks = context.get('tasks', [])
-            if active_tasks:
-                task_summary = [f"- {task['task_name']}: {task['status']}" for task in active_tasks[:3]]
-                system_context.append(f"Active tasks:\n" + "\n".join(task_summary))
-            
-            # Add relevant memories
-            memories = context.get('memories', {})
-            if memories:
-                important_facts = memories.get('important_facts', [])[:2]
-                if important_facts:
-                    facts = [fact['content'] for fact in important_facts]
-                    system_context.append(f"Important context: {'; '.join(facts)}")
-            
-            if system_context:
+        # Add comprehensive system message with memory instructions
+        if context.get('agent_state') or context.get('tasks') or context.get('memories'):
+            system_prompt = self._build_memory_aware_system_prompt(context)
+            if system_prompt:
                 enhanced_messages.append({
                     "role": "system",
-                    "content": "Context from previous interactions:\n" + "\n".join(system_context)
+                    "content": system_prompt
                 })
         
         # Add original messages
         enhanced_messages.extend(messages)
         
         return enhanced_messages
+    
+    def _build_memory_aware_system_prompt(self, context: Dict) -> str:
+        """Build comprehensive system prompt with memory utilization instructions"""
+        prompt_sections = []
+        
+        # Core memory instructions
+        prompt_sections.append("""You are an AI assistant with access to conversation history and learned user preferences. 
+
+MEMORY UTILIZATION INSTRUCTIONS:
+• Reference previous conversations naturally when relevant
+• Adapt your communication style based on learned user preferences
+• Acknowledge patterns you've observed about the user
+• Continue or reference active tasks from previous sessions
+• Prioritize information based on importance and recency
+
+BEHAVIORAL ADAPTATION GUIDELINES:""")
+        
+        # User preferences section
+        user_prefs = context.get('agent_state', {}).get('user_preferences')
+        if user_prefs:
+            pref_instructions = ["• ADAPT YOUR RESPONSES based on these learned preferences:"]
+            for key, value in user_prefs.items():
+                if 'prefers_code' in key and value > 2:
+                    pref_instructions.append("  - User frequently requests code examples - provide them proactively")
+                elif 'asks_questions' in key and value > 3:
+                    pref_instructions.append("  - User asks many questions - be thorough in explanations")
+                elif 'requests_explanation' in key and value > 2:
+                    pref_instructions.append("  - User values detailed explanations - provide comprehensive answers")
+                elif 'avg_message_length' in key and value > 100:
+                    pref_instructions.append("  - User writes detailed messages - match with substantial responses")
+                elif key in ['language', 'framework', 'tool'] and isinstance(value, str):
+                    pref_instructions.append(f"  - User prefers {key}: {value} - reference when relevant")
+            
+            if len(pref_instructions) > 1:
+                prompt_sections.append("\n".join(pref_instructions))
+        
+        # Active tasks section
+        active_tasks = context.get('tasks', [])
+        if active_tasks:
+            task_instructions = ["• ACTIVE TASKS to reference or continue:"]
+            for task in active_tasks[:3]:
+                status = task.get('status', 'unknown')
+                name = task.get('task_name', 'Unnamed task')
+                desc = task.get('description', '')[:50]
+                priority = task.get('priority', 1)
+                
+                priority_indicator = "🔥" if priority >= 3 else "⭐" if priority >= 2 else "📋"
+                task_instructions.append(f"  {priority_indicator} {name} ({status}) - {desc}")
+            
+            task_instructions.append("  - Reference these tasks when providing related assistance")
+            task_instructions.append("  - Offer to continue or update task progress when appropriate")
+            prompt_sections.append("\n".join(task_instructions))
+        
+        # Important memories section
+        memories = context.get('memories', {})
+        if memories:
+            memory_instructions = ["• IMPORTANT CONTEXT to acknowledge:"]
+            
+            # Important facts
+            important_facts = memories.get('important_facts', [])[:2]
+            if important_facts:
+                for fact in important_facts:
+                    content = fact['content'][:100]  # Truncate long facts
+                    importance = fact.get('importance', 1)
+                    indicator = "🔥" if importance >= 3 else "💡"
+                    memory_instructions.append(f"  {indicator} {content}")
+            
+            # User patterns
+            patterns = memories.get('patterns', [])[:2]
+            if patterns:
+                memory_instructions.append("  📊 Observed patterns:")
+                for pattern in patterns:
+                    memory_instructions.append(f"    - {pattern['content'][:80]}")
+            
+            # Successful interactions
+            successful = memories.get('successful_interactions', [])[:1]
+            if successful:
+                memory_instructions.append(f"  ✅ Previous success: {successful[0]['content'][:60]}")
+            
+            prompt_sections.append("\n".join(memory_instructions))
+        
+        # Response guidelines
+        prompt_sections.append("""
+RESPONSE GUIDELINES:
+• Build on previous conversations - reference past discussions naturally
+• Use learned information to personalize responses
+• When relevant, acknowledge what you remember about the user's work/interests
+• If continuing a task, reference previous progress
+• Maintain consistency with established preferences and patterns
+
+Remember: Use this context to provide more helpful, personalized responses while maintaining natural conversation flow.""")
+        
+        return "\n".join(prompt_sections)
     
     def chat_completion(self, messages, model="qwen-3-coder-480b", stream=True, 
                        max_completion_tokens=40000, temperature=0.7, top_p=0.8,
