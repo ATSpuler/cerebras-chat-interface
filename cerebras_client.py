@@ -127,6 +127,8 @@ BEHAVIORAL ADAPTATION GUIDELINES:""")
         # Response guidelines
         prompt_sections.append("""
 RESPONSE GUIDELINES:
+• Be brief and concise - use only the needed text to convey the matter precisely
+• Do not hallucinate or invent - only state things you are certain to be true
 • Build on previous conversations - reference past discussions naturally
 • Use learned information to personalize responses
 • When relevant, acknowledge what you remember about the user's work/interests
