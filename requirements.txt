@@ -1,4 +1,4 @@
 python-dotenv
-cerebras_cloud_sdk
-gradio
 apsw
+gradio==5.50.0
+cerebras-cloud-sdk==1.59.0

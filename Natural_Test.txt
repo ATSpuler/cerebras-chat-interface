@@ -1,0 +1,23 @@
+To naturally test the agent-database binding, run the chat application
+  and engage in typical coding conversations over 2-3 days without
+  restarting the app. Start by discussing a specific project (like "I'm
+  building a Python Flask API for user authentication") and ask for code
+  examples, explanations, and troubleshooting help. The system should
+  learn your preferences for Flask over Django, detect that you prefer
+  detailed code examples, and remember your authentication project
+  context. After 10-15 messages, restart the application to test
+  persistence - when you resume conversations, the agent should reference
+  your Flask project and previous discussions without you repeating
+  context. Continue with different topics (database design, frontend
+  frameworks, deployment) to build a diverse conversation history. Within
+  24-48 hours of mixed usage, you should notice responses becoming more
+  tailored - mentioning Flask when you ask about web frameworks, providing
+   code-heavy responses if you typically request examples, and referencing
+   previous project discussions. Test natural language database queries by
+   asking "How many conversations have we had?" or "What topics have we
+  discussed?" The system should process these as database queries and
+  provide accurate results. For optimal testing, keep the application
+  running for 4-6 hours during active development sessions, then restart
+  to verify persistence, allowing the system to accumulate meaningful
+  interaction patterns while demonstrating that learned context survives
+  application restarts.
