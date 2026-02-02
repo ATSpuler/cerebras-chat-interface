@@ -139,7 +139,7 @@ Remember: Use this context to provide more helpful, personalized responses while
         
         return "\n".join(prompt_sections)
     
-    def chat_completion(self, messages, model="zai-glm-4.6", stream=True, 
+    def chat_completion(self, messages, model="zai-glm-4.7", stream=True, 
                        max_completion_tokens=40000, temperature=0.7, top_p=0.8,
                        use_enhanced_context=True):
         """

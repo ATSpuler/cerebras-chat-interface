@@ -98,7 +98,7 @@ def create_chat_interface():
     # Create simple chat interface (avoiding complex Blocks for now)
     chat_interface = gr.ChatInterface(
         fn=chat_function,
-        title="Albin's Console based on zai-glm-4.6 (with Agent-DB Binding)",
+        title="Albin's Console based on zai-glm-4.7 (with Agent-DB Binding)",
         theme=gr.themes.Soft(),
         css="""
             footer { display: none !important; }
